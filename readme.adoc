@@ -76,7 +76,6 @@ git clone https://github.com/burrsutter/blue-green-canary
 oc project one
 ./4_service.sh
 
-
 # Declare Resources
 oc create -f src/main/tekton/pipeline-resources-openshift.yml
 
@@ -125,8 +124,7 @@ https://github.com/burrsutter/blue-green-canary/blob/master/src/main/java/com/bu
 watch kubectl get pods
 
 To get the URL for end-users UI
-kubectl get route istio-ingressgateway -n istio-system --output 'jsonpath={.status.ingress[].host}')
-
+kubectl get route istio-ingressgateway -n istio-system --output 'jsonpath={.status.ingress[].host}'
 
 
 ./poll_bgc_ocp4_gateway.sh
@@ -134,7 +132,7 @@ kubectl get route istio-ingressgateway -n istio-system --output 'jsonpath={.stat
 # Should be alternating across blue/green/canary
 
 # the URL for your browser
-URL=$(kubectl get route istio-ingressgateway -n istio-system --output 'jsonpath={.status.ingress[].host}')/api
+URL=$(kubectl get route istio-ingressgateway -n istio-system --output 'jsonpath={.status.ingress[].host}')/bgc
 
 # everybody blue
 kubectl replace -f src/main/istio/Virtual_service_blue.yml

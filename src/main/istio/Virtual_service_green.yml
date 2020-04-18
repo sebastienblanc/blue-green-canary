@@ -10,7 +10,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /
+        prefix: /bgc
     rewrite:
       uri: /
     route:
@@ -20,3 +20,15 @@ spec:
           number: 8080
         subset: version-green        
       weight: 100
+  - match:
+    - uri:
+        prefix: /api
+    rewrite:
+      uri: /api
+    route:
+    - destination:
+        host: blue-green-canary
+        port:
+          number: 8080
+        subset: version-green
+      weight: 100                

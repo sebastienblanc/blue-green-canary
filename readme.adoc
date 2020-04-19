@@ -52,7 +52,7 @@ tekton-triggers-webhook-5cf995778d-tqrnk       1/1     Running   0          8m11
 oc new-project one
 
 # Add the project to Istio Servicemesh Member Roll
-kubectl create -n one src/istio/servicemesh-member.yaml
+kubectl create -n one src/main/istio/servicemesh-member.yaml
 
 ----
 

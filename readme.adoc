@@ -51,9 +51,8 @@ tekton-triggers-webhook-5cf995778d-tqrnk       1/1     Running   0          8m11
 
 oc new-project one
 
-# Add kind: ServiceMeshMemberRoll via the Operator UI into namespace istio-system
-one
-https://screencast.com/t/SzOC6IhHbhH
+# Add the project to Istio Servicemesh Member Roll
+kubectl create -n one src/istio/servicemesh-member.yaml
 
 ----
 
@@ -70,7 +69,7 @@ watch oc get pods -n rhd-workshop-infra
 git clone https://github.com/burrsutter/blue-green-canary
 
 oc project one
-./4_service.sh
+./scripts/4_service.sh
 
 # Declare Resources
 oc create -f src/main/tekton/pipeline-resources-openshift.yml
@@ -78,9 +77,7 @@ oc create -f src/main/tekton/pipeline-resources-openshift.yml
 tkn res ls
 NAME               TYPE    DETAILS
 bgc-git-source     git     url: https://github.com/burrsutter/blue-green-canary
-bgc-image-blue     image   url: image-registry.openshift-image-registry.svc:5000/one/blue-green-canary:blue
-bgc-image-canary   image   url: image-registry.openshift-image-registry.svc:5000/one/blue-green-canary:canary
-bgc-image-green    image   url: image-registry.openshift-image-registry.svc:5000/one/blue-green-canary:green
+bgc-image-blue     image   url: image-registry.openshift-image-registry.svc:5000/one/blue-green-canary
 
 # Declare Tasks
 # yq & kubectl apply
@@ -105,17 +102,17 @@ bgc-build-deploy   5 seconds ago   ---        ---       ---        ---
 https://github.com/burrsutter/blue-green-canary/blob/master/src/main/java/com/burrsutter/bluegreencanary/APIResource.java
 
 # Start the pipeline
-./5_start_pipeline_blue.sh
+./scripts/5_start_pipeline_blue.sh
 
 # Use list_containers.sh 
 
 # Change APIResource.java & HelloResourceTest for Bonjour/green
-./5_start_pipeline_green.sh
+./scripts/5_start_pipeline_green.sh
 
 # Change APIResource.java & HelloResourceTest for Hola/canary
-./5_start_pipeline_canary.sh
+./scripts/5_start_pipeline_canary.sh
 
-./6_deploy_gateway.sh
+./scripts/6_deploy_gateway.sh
 
 watch kubectl get pods
 
@@ -123,7 +120,7 @@ To get the URL for end-users UI
 kubectl get route istio-ingressgateway -n istio-system --output 'jsonpath={.status.ingress[].host}'
 
 
-./poll_bgc_ocp4_gateway.sh
+./scripts/poll_bgc_ocp4_gateway.sh
 
 # Should be alternating across blue/green/canary
 

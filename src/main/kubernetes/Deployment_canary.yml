@@ -16,33 +16,36 @@ spec:
         group: bgc
         version: canary
       annotations:
-        sidecar.istio.io/inject: "true"        
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
-      - name: canary
-        image: docker.io/burrsutter/blue-green-canary:canary
-        imagePullPolicy: Always
-        ports:
-          - containerPort: 8080
-        resources:
-          requests: 
-            memory: "50Mi" 
-            cpu: "100m" 
-          limits:
-            memory: "120Mi"
-            cpu: "250m" 
-        livenessProbe:
-          httpGet:
+        - name: canary
+          image: quay.io/rhdevelopers/blue-green-canary
+          # Color Yello
+          env:
+            - name: BLUE_GREEN_CANARY_COLOR
+              value: "#f2f25e"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "150Mi"
+              cpu: "100m"
+            limits:
+              memory: "200Mi"
+              cpu: "250m"
+          livenessProbe:
+            httpGet:
               port: 8080
-              path: /api
-          initialDelaySeconds: 2
-          periodSeconds: 5
-          timeoutSeconds: 2
-        readinessProbe:
-          httpGet:
-            port: 8080
-            path: /api
-          initialDelaySeconds: 3
-          periodSeconds: 3
-          timeoutSeconds: 2
-
+              path: /health/live
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /health/ready
+            initialDelaySeconds: 3
+            periodSeconds: 3
+            timeoutSeconds: 2

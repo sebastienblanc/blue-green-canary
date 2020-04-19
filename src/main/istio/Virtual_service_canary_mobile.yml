@@ -4,19 +4,19 @@ metadata:
   name: blue-green-canary
 spec:
   hosts:
-  - "*"
+    - "*"
   gateways:
-  - bgc-gateway
+    - bgc-gateway
   http:
-  - match:
-    - headers:
-        user-agent:
-          regex: .*Mobile.*
-    route:
-    - destination:
-        host: blue-green-canary
-        subset: version-canary
-  - route:
-    - destination:
-        host: blue-green-canary
-        subset: version-green
+    - match:
+        - headers:
+            user-agent:
+              regex: .*Mobile.*
+      route:
+        - destination:
+            host: blue-green-canary
+            subset: version-blue
+    - route:
+        - destination:
+            host: blue-green-canary
+            subset: version-green

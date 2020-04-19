@@ -69,7 +69,7 @@ watch oc get pods -n rhd-workshop-infra
 git clone https://github.com/burrsutter/blue-green-canary
 
 oc project one
-./scripts/4_service.sh
+./4_service.sh
 
 # Declare Resources
 oc create -f src/main/tekton/pipeline-resources-openshift.yml
@@ -102,17 +102,17 @@ bgc-build-deploy   5 seconds ago   ---        ---       ---        ---
 https://github.com/burrsutter/blue-green-canary/blob/master/src/main/java/com/burrsutter/bluegreencanary/APIResource.java
 
 # Start the pipeline
-./scripts/5_start_pipeline_blue.sh
+./5_start_pipeline_blue.sh
 
 # Use list_containers.sh 
 
 # Change APIResource.java & HelloResourceTest for Bonjour/green
-./scripts/5_start_pipeline_green.sh
+./5_start_pipeline_green.sh
 
 # Change APIResource.java & HelloResourceTest for Hola/canary
-./scripts/5_start_pipeline_canary.sh
+./5_start_pipeline_canary.sh
 
-./scripts/6_deploy_gateway.sh
+./6_deploy_gateway.sh
 
 watch kubectl get pods
 
@@ -120,7 +120,7 @@ To get the URL for end-users UI
 kubectl get route istio-ingressgateway -n istio-system --output 'jsonpath={.status.ingress[].host}'
 
 
-./scripts/poll_bgc_ocp4_gateway.sh
+./poll_bgc_ocp4_gateway.sh
 
 # Should be alternating across blue/green/canary
 

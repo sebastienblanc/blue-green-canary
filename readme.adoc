@@ -102,15 +102,9 @@ bgc-build-deploy   5 seconds ago   ---        ---       ---        ---
 https://github.com/burrsutter/blue-green-canary/blob/master/src/main/java/com/burrsutter/bluegreencanary/APIResource.java
 
 # Start the pipeline
-./5_start_pipeline_blue.sh
+./5_start_pipeline_bgc.sh
 
 # Use list_containers.sh 
-
-# Change APIResource.java & HelloResourceTest for Bonjour/green
-./5_start_pipeline_green.sh
-
-# Change APIResource.java & HelloResourceTest for Hola/canary
-./5_start_pipeline_canary.sh
 
 ./6_deploy_gateway.sh
 

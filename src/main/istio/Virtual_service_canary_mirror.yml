@@ -4,19 +4,31 @@ metadata:
   name: blue-green-canary
 spec:
   hosts:
-  - "*"
+    - "*"
   gateways:
-  - bgc-gateway
+    - bgc-gateway
   http:
-  - match:
-    - uri:
-        prefix: /bgc
-    rewrite:
-      uri: /
-    route:
-    - destination:
-        host: blue-green-canary
-        subset: version-green
-      mirror:
-        host: blue-green-canary
-        subset: version-canary
+    - match:
+        - uri:
+            prefix: /api
+      rewrite:
+        uri: /api
+      route:
+        - destination:
+            host: blue-green-canary
+            subset: version-green
+          mirror:
+            host: blue-green-canary
+            subset: version-canary
+    - match:
+        - uri:
+            prefix: /bgc
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: blue-green-canary
+            subset: version-green
+          mirror:
+            host: blue-green-canary
+            subset: version-canary

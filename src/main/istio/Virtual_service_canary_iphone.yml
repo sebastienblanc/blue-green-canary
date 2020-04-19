@@ -4,19 +4,59 @@ metadata:
   name: blue-green-canary
 spec:
   hosts:
-  - "*"
+    - "*"
   gateways:
-  - bgc-gateway
+    - bgc-gateway
   http:
-  - match:
-    - headers:
-        user-agent:
-          regex: .*iPhone.*
-    route:
-    - destination:
-        host: blue-green-canary
-        subset: version-canary
-  - route:
-    - destination:
-        host: blue-green-canary
-        subset: version-green
+    - match:
+        - headers:
+            user-agent:
+              regex: .*iPhone.*
+          uri:
+            prefix: /bgc
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: blue-green-canary
+            port:
+              number: 8080
+            subset: version-canary
+          weight: 100
+    - match:
+        - headers:
+            user-agent:
+              regex: .*iPhone.*
+          uri:
+            prefix: /api
+      rewrite:
+        uri: /api
+      route:
+        - destination:
+            host: blue-green-canary
+            port:
+              number: 8080
+            subset: version-canary
+          weight: 100
+    - match:
+        - uri:
+            prefix: /bgc
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            host: blue-green-canary
+            port:
+              number: 8080
+            subset: version-green
+    - match:
+        - uri:
+            prefix: /api
+      rewrite:
+        uri: /api
+      route:
+        - destination:
+            host: blue-green-canary
+            port:
+              number: 8080
+            subset: version-green

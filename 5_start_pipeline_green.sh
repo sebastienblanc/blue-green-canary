@@ -5,4 +5,4 @@ tkn pipeline start bgc-build-deploy \
  --param="kubernetesResourceFile=/workspace/source/src/main/kubernetes/Deployment_green.yml" \
  --resource="appSource=bgc-git-source" \
  --resource="appImage=bgc-image-green" \
- --serviceaccount="pipeline"
+ --showlog

@@ -6,7 +6,7 @@ spec:
   type: git
   params: 
   - name: url
-    value: https://github.com/burrsutter/blue-green-canary
+    value: https://github.com/redhat-developer-demos/blue-green-canary
   - name: revision
     value: master
 ---

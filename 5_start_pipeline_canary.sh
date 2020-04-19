@@ -5,4 +5,4 @@ tkn pipeline start bgc-build-deploy \
  --param="kubernetesResourceFile=/workspace/source/src/main/kubernetes/Deployment_canary.yml" \
  --resource="appSource=bgc-git-source" \
  --resource="appImage=bgc-image-canary" \
- --serviceaccount="pipeline"
+ --showlog

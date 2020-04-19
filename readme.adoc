@@ -5,28 +5,24 @@ With Tekton pipeline builds
 With Istio 
 
 
-== OpenShift
+== OpenShift Only Instructions
 
 ----
 # 16 cores available in worker nodes
 
-# Add the Istio & Tekton
-git clone https://github.com/redhat-developer-demos/guru-night
+Install Istio 
 
-cd guru-night
+https://docs.openshift.com/container-platform/4.3/service_mesh/service_mesh_install/installing-ossm.html
 
-cp setenv.example setEnv-aws.sh
+Install Tekton
 
-mkdir work
+https://openshift.github.io/pipelines-docs/docs/0.10.5/proc_installing-pipelines-operator-in-web-console.html
 
-export CLOUD_PROFILE=aws
+or
 
-edit setEnv-aws.sh
+https://redhat-developer-demos.github.io/tekton-tutorial/tekton-tutorial/setup.html#deploy-tekton
 
-./workshopper installCatalogSources
-./workshopper installServicemesh
-./workshopper createServicemesh
-./workshopper installPipelines
+Verify Istio Installation
 
 kubectl api-resources --api-group='networking.istio.io'
 

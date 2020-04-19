@@ -18,23 +18,23 @@ spec:
     - name: source
       type: git      
   steps:
-  - name: before-yq-echo
-    image: fedora
-    command: ['echo', '$(inputs.params.kubernetesResourceFile)']
-  - name: before-yq-cat
-    image: fedora
-    command: ['cat', '$(inputs.params.kubernetesResourceFile)']
-  - name: yq
-    image: "$(inputs.params.yq-image)"
-    command: ["yq"]
-    args: ["$(inputs.params.ARGS)"]
-  - name: after-yq-cat
-    image: fedora
-    command: ['cat', '$(inputs.params.kubernetesResourceFile)']
-  - name: kubctl-deploy
-    image: quay.io/rhdevelopers/tutorial-tools:0.0.2
-    command: ['kubectl']
-    args:
-    - apply
-    - -f 
-    - $(inputs.params.kubernetesResourceFile)
+    - name: before-yq-echo
+      image: fedora
+      command: ['echo', '$(inputs.params.kubernetesResourceFile)']
+    - name: before-yq-cat
+      image: fedora
+      command: ['cat', '$(inputs.params.kubernetesResourceFile)']
+    - name: yq
+      image: "$(inputs.params.yq-image)"
+      command: ["yq"]
+      args: ["$(inputs.params.ARGS)"]
+    - name: after-yq-cat
+      image: fedora
+      command: ['cat', '$(inputs.params.kubernetesResourceFile)']
+    - name: kubctl-deploy
+      image: quay.io/rhdevelopers/tutorial-tools:0.0.2
+      command: ['kubectl']
+      args:
+      - apply
+      - -f 
+      - $(inputs.params.kubernetesResourceFile)

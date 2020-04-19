@@ -9,7 +9,10 @@ spec:
     - bgc-gateway
   http:
     - match:
-        - uri:
+        - headers:
+            user-agent:
+              regex: .*Firefox.*
+          uri:
             prefix: /bgc
       rewrite:
         uri: /
@@ -18,18 +21,13 @@ spec:
             host: blue-green-canary
             port:
               number: 8080
-            subset: version-blue
+            subset: version-canary
           weight: 100
     - match:
         - headers:
             user-agent:
               regex: .*Firefox.*
-      route:
-        - destination:
-            host: blue-green-canary
-            subset: version-canary
-    - match:
-        - uri:
+          uri:
             prefix: /api
       rewrite:
         uri: /api
@@ -38,7 +36,7 @@ spec:
             host: blue-green-canary
             port:
               number: 8080
-            subset: version-blue
+            subset: version-canary
           weight: 100
     - route:
         - destination:

@@ -25,6 +25,8 @@ spec:
             # Color Green
             - name: BLUE_GREEN_CANARY_COLOR
               value: "#5bbf45"
+            - name: BLUE_GREEN_CANARY_MESSAGE
+              value: "Hola"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

@@ -15,6 +15,7 @@ import org.jboss.logging.Logger;
 
 import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 /**
  * APIResource
  */
@@ -30,7 +31,8 @@ public class APIResource {
   // String color = "#6bbded"; // blue
   // String color = "#5bbf45"; // green
   // String color = "#f2f25e"; // canary
-  String hello = "Hello";
+  @ConfigProperty(name = "blue-green-canary.message")
+  String hello;
 
   String hostname = System.getenv().getOrDefault("HOSTNAME", "unknown");
   // Map<String, HttpSession> sessions = new ConcurrentHashMap<>();

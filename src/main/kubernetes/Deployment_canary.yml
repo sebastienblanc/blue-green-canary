@@ -25,6 +25,8 @@ spec:
           env:
             - name: BLUE_GREEN_CANARY_COLOR
               value: "#f2f25e"
+            - name: BLUE_GREEN_CANARY_MESSAGE
+              value: "Bonjour"
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

@@ -42,7 +42,7 @@ spec:
       image: fedora
       command: ["echo", "$(inputs.params.destinationImage)"]
     - name: build-sources
-      image: quay.io/quarkus/
+      image: docker.io/maven:3.6.3-jdk-11-slim
       workingDir: "/workspace/source/$(inputs.params.contextDir)"
       command:
         - mvn
@@ -50,9 +50,10 @@ spec:
         - clean
         - package
         - -DskipTests
+        - -gs settings.xml
       env:
-        - name: MAVEN_MIRROR_URL
-          value: "$(inputs.params.mavenMirrorUrl)"
+        - name: user.home
+          value: /tekton/home
     - name: ls-build-target
       image: fedora
       command: ["ls", "/workspace/source/target"]

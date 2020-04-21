@@ -5,36 +5,57 @@ metadata:
 spec:
   inputs:
     params:
-    - name: yq-image
-      description: yq CLI container image to run this task
-      default: docker.io/mikefarah/yq
-    - name: ARGS
-      type: array
-    - name: kubernetesResourceFile
-      default: Deployment.yml
+      # - name: yq-image
+      #   description: yq CLI container image to run this task
+      #   default: docker.io/mikefarah/yq
+      - name: appName
+        type: string
+      - name: color
+        type: string
+      - name: message
+        type: string
     resources:
-    - name: image
-      type: image
-    - name: source
-      type: git      
+      - name: source
+        type: git
   steps:
-    - name: before-yq-echo
-      image: fedora
-      command: ['echo', '$(inputs.params.kubernetesResourceFile)']
-    - name: before-yq-cat
-      image: fedora
-      command: ['cat', '$(inputs.params.kubernetesResourceFile)']
-    - name: yq
-      image: "$(inputs.params.yq-image)"
-      command: ["yq"]
-      args: ["$(inputs.params.ARGS)"]
+    # - name: before-yq-echo
+    #   image: fedora
+    #   command: ["echo", "$(inputs.params.kubernetesResourceFile)"]
+    # - name: before-yq-cat
+    #   image: fedora
+    #   command: ["cat", "$(inputs.params.kubernetesResourceFile)"]
+    # - name: yq
+    #   image: "$(inputs.params.yq-image)"
+    #   command: ["yq"]
+    #   args: ["$(inputs.params.ARGS)"]
+    # - name: after-yq-cat
+    #   image: fedora
+    #   command: ["cat", "$(inputs.params.kubernetesResourceFile)"]
+    - name: set-color
+      image: docker.io/mikefarah/yq
+      script: |
+        #!/bin/sh
+        yq w -i "$YAML_SRC_DIR/Deployment.yml" 'metadata.name' $APP_NAME
+        yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.metadata.labels.version' $APP_NAME
+        yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.spec.containers[0].name' $APP_NAME
+        yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.spec.containers[0].env[0].value' $BLUE_GREEN_CANARY_COLOR
+        yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.spec.containers[0].env[1].value' $BLUE_GREEN_CANARY_MESSAGE
+      env:
+        - name: YAML_SRC_DIR
+          value: "/workspace/source/src/main/kubernetes"
+        - name: APP_NAME
+          value: "$(inputs.params.appName)"
+        - name: BLUE_GREEN_CANARY_COLOR
+          value: "$(inputs.params.color)"
+        - name: BLUE_GREEN_CANARY_MESSAGE
+          value: "$(inputs.params.message)"
     - name: after-yq-cat
       image: fedora
-      command: ['cat', '$(inputs.params.kubernetesResourceFile)']
-    - name: kubctl-deploy
-      image: quay.io/rhdevelopers/tutorial-tools:0.0.2
-      command: ['kubectl']
+      command: ["cat", "/workspace/source/src/main/kubernetes/Deployment.yml"]
+    - name: kubectl-deploy
+      image: quay.io/rhdevelopers/tutorial-tools:0.0.3
+      command: ["kubectl"]
       args:
-      - apply
-      - -f 
-      - $(inputs.params.kubernetesResourceFile)
+        - apply
+        - -f
+        - /workspace/source/src/main/kubernetes/Deployment.yml

@@ -14,23 +14,28 @@ spec:
       labels:
         app: blue-green-canary
         group: bgc
-        version: green
+        version: <will be updated>
       annotations:
         sidecar.istio.io/inject: "true"
     spec:
       containers:
-        - name: green
-          image: burr3
+        - name: <will be updated>
+          image: quay.io/rhdevelopers/blue-green-canary
           imagePullPolicy: Always
+          env:
+            - name: BLUE_GREEN_CANARY_COLOR
+              value: "#000"
+            - name: BLUE_GREEN_CANARY_MESSAGE
+              value: "Not Updated"
           ports:
             - containerPort: 8080
           resources:
             requests:
-              memory: 50Mi
-              cpu: 100m
+              memory: "150Mi"
+              cpu: "100m"
             limits:
-              memory: 120Mi
-              cpu: 250m
+              memory: "200Mi"
+              cpu: "250m"
           livenessProbe:
             httpGet:
               port: 8080

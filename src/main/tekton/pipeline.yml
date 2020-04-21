@@ -7,9 +7,12 @@ spec:
     - name: mavenMirrorUrl
       description: the maven mirror
       default: http://repo1.maven.apache.org/maven2
-    - name: kubernetesResourceFile
-      description: the kubernetes resource file to apply
-      default: /workspace/source/src/main/kubernetes/Deployment_burr.yml
+    - name: appName
+      description: the deployment name, this value will be set as deployment name, version label and contaier name
+    - name: color
+      description: the hexa decimal color value
+    - name: message
+      description: the message like Hello, Bonjour or Hola
     - name: contextDir
       description: the context directory of the Java sources
       default: .
@@ -36,7 +39,7 @@ spec:
         outputs:
           - name: builtImage
             resource: appImage
-    - name: deploy-blue
+    - name: deploy-bgc
       taskRef:
         name: yq-deploy
       runAfter:
@@ -48,54 +51,9 @@ spec:
           - name: image
             resource: appImage
       params:
-        - name: kubernetesResourceFile
-          value: "/workspace/source/src/main/kubernetes/Deployment_blue.yml"
-        - name: ARGS
-          value:
-            - "w"
-            - "-i"
-            - "$(params.kubernetesResourceFile)"
-            - "spec.template.spec.containers[0].image"
-            - "$(inputs.resources.image.url)"
-    - name: deploy-green
-      taskRef:
-        name: yq-deploy
-      runAfter:
-        - build-java-app
-      resources:
-        inputs:
-          - name: source
-            resource: appSource
-          - name: image
-            resource: appImage
-      params:
-        - name: kubernetesResourceFile
-          value: "/workspace/source/src/main/kubernetes/Deployment_green.yml"
-        - name: ARGS
-          value:
-            - "w"
-            - "-i"
-            - "$(params.kubernetesResourceFile)"
-            - "spec.template.spec.containers[0].image"
-            - "$(inputs.resources.image.url)"
-    - name: deploy-canary
-      taskRef:
-        name: yq-deploy
-      runAfter:
-        - build-java-app
-      resources:
-        inputs:
-          - name: source
-            resource: appSource
-          - name: image
-            resource: appImage
-      params:
-        - name: kubernetesResourceFile
-          value: "/workspace/source/src/main/kubernetes/Deployment_canary.yml"
-        - name: ARGS
-          value:
-            - "w"
-            - "-i"
-            - "$(params.kubernetesResourceFile)"
-            - "spec.template.spec.containers[0].image"
-            - "$(inputs.resources.image.url)"
+        - name: appName
+          value: "$(params.appName)"
+        - name: color
+          value: "$(params.color)"
+        - name: message
+          value: "$(params.message)"

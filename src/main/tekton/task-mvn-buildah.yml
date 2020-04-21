@@ -11,9 +11,6 @@ spec:
       - name: contextDir
         description: the context dir within source
         default: .
-      - name: mavenMirrorUrl
-        description: the maven mirror url
-        default: http://repo1.maven.apache.org/maven2
       - name: destinationImage
         description: Parameter Description
         default: "$(outputs.resources.builtImage.url)"
@@ -47,10 +44,10 @@ spec:
       command:
         - mvn
       args:
+        - --global-settings=settings.xml
         - clean
         - package
         - -DskipTests
-        - -gs settings.xml
       env:
         - name: user.home
           value: /tekton/home

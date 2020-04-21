@@ -4,9 +4,6 @@ metadata:
   name: bgc-build-deploy
 spec:
   params:
-    - name: mavenMirrorUrl
-      description: the maven mirror
-      default: http://repo1.maven.apache.org/maven2
     - name: appName
       description: the deployment name, this value will be set as deployment name, version label and contaier name
     - name: color
@@ -28,8 +25,6 @@ spec:
       params:
         - name: contextDir
           value: "$(params.contextDir)"
-        - name: mavenMirrorUrl
-          value: "$(params.mavenMirrorUrl)"
         - name: dockerFile
           value: src/main/docker/Dockerfile.jvm
       resources:
@@ -48,7 +43,7 @@ spec:
         inputs:
           - name: source
             resource: appSource
-          - name: image
+          - name: appImage
             resource: appImage
       params:
         - name: appName

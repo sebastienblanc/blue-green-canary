@@ -49,7 +49,7 @@ spec:
         - name: APP_NAME
           value: "$(inputs.params.appName)"
         - name: APP_IMAGE
-          value: "$(resources.appImage.url)"
+          value: "$(inputs.resources.appImage.url)"
         - name: BLUE_GREEN_CANARY_COLOR
           value: "$(inputs.params.color)"
         - name: BLUE_GREEN_CANARY_MESSAGE

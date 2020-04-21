@@ -17,6 +17,8 @@ spec:
     resources:
       - name: source
         type: git
+      - name: appImage
+        type: image
   steps:
     # - name: before-yq-echo
     #   image: fedora
@@ -38,6 +40,7 @@ spec:
         yq w -i "$YAML_SRC_DIR/Deployment.yml" 'metadata.name' $APP_NAME
         yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.metadata.labels.version' $APP_NAME
         yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.spec.containers[0].name' $APP_NAME
+        yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.spec.containers[0].image' $APP_IMAGE
         yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.spec.containers[0].env[0].value' $BLUE_GREEN_CANARY_COLOR
         yq w -i "$YAML_SRC_DIR/Deployment.yml" 'spec.template.spec.containers[0].env[1].value' $BLUE_GREEN_CANARY_MESSAGE
       env:
@@ -45,6 +48,8 @@ spec:
           value: "/workspace/source/src/main/kubernetes"
         - name: APP_NAME
           value: "$(inputs.params.appName)"
+        - name: APP_IMAGE
+          value: "$(resources.appImage.url)"
         - name: BLUE_GREEN_CANARY_COLOR
           value: "$(inputs.params.color)"
         - name: BLUE_GREEN_CANARY_MESSAGE

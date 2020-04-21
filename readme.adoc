@@ -72,7 +72,7 @@ oc project one
 ./4_service.sh
 
 # Declare Resources
-oc create -f src/main/tekton/pipeline-resources-openshift.yml
+kubectl apply -f src/main/tekton/pipeline-resources.yml
 
 tkn res ls
 NAME               TYPE    DETAILS
@@ -81,9 +81,9 @@ bgc-image-blue     image   url: image-registry.openshift-image-registry.svc:5000
 
 # Declare Tasks
 # yq & kubectl apply
-oc apply -f src/main/tekton/task-yq-deploy.yml
+kubectl apply -f src/main/tekton/task-yq-deploy.yml
 # mvn & buildah
-oc apply -f src/main/tekton/task-mvn-buildah.yml
+kubectl apply -f src/main/tekton/task-mvn-buildah.yml
 
 tkn task ls
 NAME               AGE
@@ -91,7 +91,7 @@ mvn-buildah        4 seconds ago
 yq-deploy          28 seconds ago
 
 # Declare Pipelines
-oc apply -f src/main/tekton/pipeline.yml
+kubectl apply -f src/main/tekton/pipeline.yml
 
 tkn pipeline ls
 NAME               AGE             LAST RUN   STARTED   DURATION   STATUS

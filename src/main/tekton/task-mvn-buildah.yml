@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-   name: mvn-buildah
+  name: mvn-buildah
 spec:
   inputs:
     resources:
@@ -13,7 +13,7 @@ spec:
         default: .
       - name: mavenMirrorUrl
         description: the maven mirror url
-        default: http://repo1.maven.apache.org/maven2   
+        default: http://repo1.maven.apache.org/maven2
       - name: destinationImage
         description: Parameter Description
         default: "$(outputs.resources.builtImage.url)"
@@ -23,7 +23,7 @@ spec:
       - name: tlsVerify
         description: tls verify
         type: string
-        default: "false"     
+        default: "false"
   outputs:
     resources:
       - name: builtImage
@@ -31,31 +31,31 @@ spec:
   steps:
     - name: ls-build-sources
       image: fedora
-      command: ['ls', '/workspace/source']
+      command: ["ls", "/workspace/source"]
     - name: echo-dockerfile
       image: fedora
-      command: ['echo', '$(inputs.params.dockerFile)']
+      command: ["echo", "$(inputs.params.dockerFile)"]
     - name: cat-dockerfile
       image: fedora
-      command: ['cat', '/workspace/source/$(inputs.params.dockerFile)']
-    - name: echo-destinationimage    
+      command: ["cat", "/workspace/source/$(inputs.params.dockerFile)"]
+    - name: echo-destinationimage
       image: fedora
-      command : ['echo', '$(inputs.params.destinationImage)']
+      command: ["echo", "$(inputs.params.destinationImage)"]
     - name: build-sources
-      image: docker.io/maven:3.6.3-jdk-8-slim
+      image: quay.io/quarkus/
       workingDir: "/workspace/source/$(inputs.params.contextDir)"
       command:
         - mvn
-      args:     
-       - clean 
-       - package
-       - -DskipTests
+      args:
+        - clean
+        - package
+        - -DskipTests
       env:
-      - name: MAVEN_MIRROR_URL
-        value: "$(inputs.params.mavenMirrorUrl)"
+        - name: MAVEN_MIRROR_URL
+          value: "$(inputs.params.mavenMirrorUrl)"
     - name: ls-build-target
       image: fedora
-      command: ['ls', '/workspace/source/target']
+      command: ["ls", "/workspace/source/target"]
     - name: build-image
       image: quay.io/buildah/stable
       workingDir: "/workspace/source/$(inputs.params.contextDir)"
@@ -71,10 +71,10 @@ spec:
         - "."
       securityContext:
         privileged: true
-        runAsUser: 0       
+        runAsUser: 0
       volumeMounts:
-      - name: varlibc
-        mountPath: /var/lib/containers
+        - name: varlibc
+          mountPath: /var/lib/containers
     - name: push-image
       image: quay.io/buildah/stable
       workingDir: "/workspace/source/$(inputs.params.contextDir)"
@@ -89,8 +89,8 @@ spec:
         runAsUser: 0
         privileged: true
       volumeMounts:
-      - name: varlibc
-        mountPath: /var/lib/containers
+        - name: varlibc
+          mountPath: /var/lib/containers
   volumes:
     - name: varlibc
       emptyDir: {}

@@ -66,17 +66,19 @@ oc new-project rhd-workshop-infra
 oc new-app sonatype/nexus -n rhd-workshop-infra
 watch oc get pods -n rhd-workshop-infra
 
-git clone https://github.com/burrsutter/blue-green-canary
+git clone https://github.com/redhat-developer-demos/blue-green-canary
 
-oc project one
+oc project one (make sure this project is in Istio SMMR)
 ./4_service.sh
 
 # Declare Resources
+# make sure to update the resources to point to the righ project in OpenShift
+# image-registry.openshift-image-registry.svc:5000/<!!!! This need to be your project!!!>/blue-green-canary
 kubectl apply -f src/main/tekton/pipeline-resources.yml
 
 tkn res ls
 NAME               TYPE    DETAILS
-bgc-git-source     git     url: https://github.com/burrsutter/blue-green-canary
+bgc-git-source     git     url: https://github.com/redhat-developer-demos/blue-green-canary
 bgc-image-blue     image   url: image-registry.openshift-image-registry.svc:5000/one/blue-green-canary
 
 # Declare Tasks
